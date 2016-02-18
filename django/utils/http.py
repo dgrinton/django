@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import os
 import base64
 import calendar
 import datetime
@@ -257,6 +258,9 @@ def same_origin(url1, url2):
     """
     Checks if two URLs are 'same-origin'
     """
+    if os.environ.get('DISABLE_SAME_ORIGIN', False):
+        url1 = re.sub('^https://','http://',url1)
+        url2 = re.sub('^https://','http://',url2)
     p1, p2 = urlparse(url1), urlparse(url2)
     try:
         o1 = (p1.scheme, p1.hostname, p1.port or PROTOCOL_TO_PORT[p1.scheme])
